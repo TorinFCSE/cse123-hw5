@@ -1,0 +1,18 @@
+
+:root {
+  --nav-bg-color: color(display-p3 0.15 0.5 0.9); 
+  --nav-bg-color-dark: color(display-p3 0.15 0.5 0.7);
+  --body-bg-color: white;
+  --text-color: black;
+  --star-color: grey;
+}
+
+.stars {
+  color: var(--star-color);
+  font-size: 3em;
+}
+body {
+  background-color: var(--body-bg-color);
+}
+
+

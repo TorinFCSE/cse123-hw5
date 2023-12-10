@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather in La Jolla</title>
+</head>
+<body>
+    <h1>Weather in La Jolla</h1>
+    <la-jolla-weather>
+        <noscript><span>Weather Conditions unavailable</span></noscript>
+        <div class="weather-info">
+        <p>Temperature: <span id="temperature"></span></p>
+        <p>Forecast: <span id="forecast"></span></p><object type="image/svg+xml" id="weather-icon" width="50" height="50"></object>
+        <p>Humidity: <span id="humidity"></span></p>
+        </div>
+    </la-jolla-weather>
+
+    <script src="weather.js">
+    </script>
+</body>
+</html>

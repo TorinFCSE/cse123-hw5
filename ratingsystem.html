@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Assignment 5</title>
+</head>
+<body>
+    <h1>Rating System</h1>
+    <div class="rating-container">
+        <!-- Stars will be added here -->
+    </div>
+    <rating-widget>
+        <form action="https://httpbin.org/post" method="post">
+            <label for="rating">How satisfied are you?</label>
+            <input type="hidden" name="question" value="How satisfied are you?">
+            <input type="hidden" name="sentBy" value="HTML">
+            <input type="number" id="rating" name="rating" min="1" max="5" value="0" required>
+            <button type="submit">Submit</button>
+        </form>
+    </rating-widget>
+    <script>
+        // Function to create stars based on the 'max' attr
+        function createStars(max, ratingWidget) {
+            const starsContainer = ratingWidget;
+            ratingWidget.querySelector('form').style.display = 'none';
+
+            for (let i = 1; i <= max; i++) {
+                const star = document.createElement('span');
+                star.textContent = '★';
+                star.setAttribute('data-rating', i);
+                star.setAttribute('class', 'stars')
+                starsContainer.appendChild(star);
+
+                star.addEventListener('mouseover', function () {
+                    const rating = parseInt(this.getAttribute('data-rating'));
+                    const stars = starsContainer.querySelectorAll('span');
+
+                    stars.forEach((s, index) => {
+                        if (index < rating) {
+                            s.style.setProperty('--star-color', 'gold');
+                        } else {
+                            s.style.setProperty('--star-color', 'grey');
+                        }
+                    });
+                });
+
+                star.addEventListener('click', function () {
+                    const rating = parseInt(this.getAttribute('data-rating'));
+                    const form = document.querySelector('form');
+
+                    const formData = new FormData(form);
+                    formData.set('rating', rating);
+                    formData.set('sentBy', 'js');
+
+                    fetch(form.getAttribute('action'), {
+                        method: 'POST',
+                        headers: {
+                            'X-Sent-By': 'JS',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(Object.fromEntries(formData))
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        const messageContainer = document.createElement('p');
+                        const message = (rating >= max * 0.8) ? `Thanks for the ${rating} star rating!` : `Thanks for the feedback of ${rating} stars. We'll try to do better.`;
+                        messageContainer.textContent = message;
+                        starsContainer.replaceWith(messageContainer);
+                    })
+                    .catch(error => alert('server error:'+error));
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const ratingWidget = document.querySelector('rating-widget');
+            const ratingInput= ratingWidget.querySelector('#rating');
+            const maxStars = ratingInput.getAttribute('max');
+            if(maxStars<3) {
+                maxStars=3;
+            } else if (maxStars>10) {
+                maxStars=10
+            }
+
+            createStars(maxStars, ratingWidget);
+        });
+    </script>
+</body>
+</html>
